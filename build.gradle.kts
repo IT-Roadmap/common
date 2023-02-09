@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
     `maven-publish`
@@ -19,7 +20,6 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework:spring-web")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -34,6 +34,10 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 }
 
+tasks.withType<BootJar> {
+    enabled = false
+}
+
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
@@ -44,12 +48,12 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+
 publishing {
     publications {
         create<MavenPublication>("jitpack") {
             groupId = "ru.boringowl"
             artifactId = "roadmap-common"
-            version = "latest"
             from(components["kotlin"])
         }
     }
