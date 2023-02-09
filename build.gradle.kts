@@ -38,6 +38,10 @@ tasks.withType<BootJar> {
     enabled = false
 }
 
+tasks.jar {
+    enabled = true
+    archiveClassifier.set("")
+}
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
