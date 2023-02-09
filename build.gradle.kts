@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "ru.boringowl"
-version = "0.0.1-SNAPSHOT"
+version = "1.0.0"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
@@ -18,8 +18,7 @@ repositories {
     maven {
         url = uri("https://jitpack.io")
         credentials {
-            username = username
-            password = project.properties["authToken"].toString()
+            username = project.properties["authToken"].toString()
         }
     }
 }
@@ -55,8 +54,7 @@ publishing {
         create<MavenPublication>("jitpack") {
             groupId = "ru.boringowl"
             artifactId = "roadmap-common"
-
-            from(components["kotlin"])
+            version = "latest"
         }
     }
 }
