@@ -15,12 +15,7 @@ java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenCentral()
-    maven {
-        url = uri("https://jitpack.io")
-        credentials {
-            username = project.properties["authToken"].toString()
-        }
-    }
+    maven(url = "https://jitpack.io")
 }
 
 dependencies {
@@ -55,6 +50,7 @@ publishing {
             groupId = "ru.boringowl"
             artifactId = "roadmap-common"
             version = "latest"
+            from(components["kotlin"])
         }
     }
 }
