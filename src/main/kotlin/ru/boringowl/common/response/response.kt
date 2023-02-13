@@ -12,13 +12,27 @@ import org.springframework.http.ResponseEntity.*
 suspend fun <T> response(
     action: suspend () -> T
 ) = flow<ResponseEntity<*>> {
-    val result = action()
-    val code = if (result is BaseResponse) result.code else HttpStatus.OK
-    emit(status(code).body(result))
+    emit(processResult(action()))
 }.catch {
-    val response = if (it is ResponseException)
-        status(it.code).body(MessageResponse(it.message ?: "No message"))
+    emit(processException(it))
+}.first()
+
+fun <T> response(
+    action: () -> T
+): ResponseEntity<*> = try {
+    processResult(action())
+} catch (e: Exception) {
+    processException(e)
+}
+
+private fun <T> processResult(result: T): ResponseEntity<T> {
+    val code = if (result is BaseResponse) result.code else HttpStatus.OK
+    return status(code).body(result)
+}
+
+private fun processException(e: Throwable): ResponseEntity<out Any> {
+    return if (e is ResponseException)
+        status(e.code).body(MessageResponse(e.message ?: "No message"))
     else
         internalServerError().build<Unit>()
-    emit(response)
-}.first()
+}
