@@ -17,7 +17,7 @@ suspend fun <T> response(
     emit(processException(it))
 }.first()
 
-fun <T> response(
+fun <T> responseSync(
     action: () -> T
 ): ResponseEntity<*> = try {
     processResult(action())
